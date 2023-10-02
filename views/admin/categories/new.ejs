@@ -1,0 +1,23 @@
+<%- include('../../partials/header.ejs') %>
+<body>
+    <%- include('../../partials/navbar.ejs') %>
+    
+    
+    <div class="container"> 
+     <hr>
+      <div class="card">
+        <div class="card-header">
+        <h2>Cadastro De Cartegoria</h2>
+        </div>
+        <div class="card-body">
+        <form action="/cartegories/save" method="post">
+            <input type="text" placeholder="digite a nova cartegoria"  class="form-control" name="title">
+            <hr>
+            <button class="btn btn-success">Salvar</button>
+        </form>
+       </div>
+    </div>
+  </div>
+</body>
+
+<%- include('../../partials/footer.ejs') %>
