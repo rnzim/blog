@@ -14,7 +14,7 @@ router.post('/cartegories/save',(req,res) =>{
             title:title,
             slug:slugify(title)
         }).then(()=>{
-            res.redirect('/')
+            res.redirect('/admin/categories')
         })
      }else{
         res.redirect('/admin/categories/new')
@@ -23,11 +23,41 @@ router.post('/cartegories/save',(req,res) =>{
 router.get('/admin/categories/',(req,res)=>{
     Category.findAll({
        raw:true, order:[['id','desc']]
-    }).then((cartegories)=>{
-        cartegories.forEach(cartegories => {
-            console.log(cartegories.title)
+    }).then((categories)=>{
+        res.render('admin/categories/index.ejs',{categories:categories})
+
+        //degug
+        categories.forEach(categories => {
+            console.log('\n\u001b[32m Cartegorias: \n')
+            console.log('\u001b[37m Categoria: '+categories.id+ '\u001b[33m  Nome: '+categories.title)
         })
     })
-    res.render('admin/categories')
+   
+})
+router.post('/categories/delete',(req,res)=>{
+    var id = req.body.id
+    if(id == undefined){
+        res.redirect('/admin/categories/ban')
+    }
+    else{
+        if(!isNaN(id)){
+            
+            Category.destroy({
+                where:{id:id}
+            }).then(()=>{
+                res.redirect('/admin/categories/')
+            })
+            
+             
+        }
+        else{
+            res.redirect('/admin/categories/ban') 
+        }
+    }
+    
+   
+})
+router.get('/admin/categories/ban',(req,res)=>{
+    res.render('admin/categories/ban')
 })
 module.exports = router
