@@ -14,7 +14,7 @@
             <tbody>
             <% categories.forEach(categories =>{ %> 
              <tr> <td><%= categories.id %></td> <td><%= categories.title %></td> <td><%= categories.slug %><td>
-                <button class="btn btn-warning">Editar</button>
+                <a class="btn btn-warning" href="/admin/categories/edit/<%= categories.id %>">Editar</a>
                 <form action="/categories/delete" method="post" id="form">
                     <input type="hidden" name="id" value="<%= categories.id %>" style="display: inline;">
                     <button class="btn btn-danger">Deletar</button>

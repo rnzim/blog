@@ -21,7 +21,7 @@ app.get("/",(req,res)=>{
     res.render('index.ejs')
 })
 
-app.listen(10,()=>{
+app.listen(1000000,()=>{
     console.log('\u001b[33mServer Running on \u001b[36mPort 12')
 })
 

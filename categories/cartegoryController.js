@@ -60,4 +60,16 @@ router.post('/categories/delete',(req,res)=>{
 router.get('/admin/categories/ban',(req,res)=>{
     res.render('admin/categories/ban')
 })
+
+router.get('/admin/categories/edit/:id',(req,res)=>{
+    var id = req.params.id
+    if(isNaN(id)){
+        res.redirect('admin/categories/')
+    }
+    Category.findByPk(id).then((category)=>{
+        res.render('admin/categories/edit.ejs',{category:category})
+    }).catch((err)=>{
+        res.redirect('admin/categories/')
+    })
+})
 module.exports = router
