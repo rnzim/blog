@@ -10,7 +10,9 @@
         <h2>Edição</h2>
         </div>
         <div class="card-body">
-        <form action="/cartegories/save" method="post">
+        <form action="/admin/categories/update/"
+            method="post">
+            <input type="hidden" name="id" value="<%= category.id%>">
             <input type="text" placeholder="digite a nova cartegoria"  class="form-control" name="title" value="<%= category.title%>">
             <hr>
             <button class="btn btn-success">Atualizar</button>

@@ -1,0 +1,36 @@
+<%- include('../../partials/header.ejs') %>
+<body>
+    <%- include('../../partials/navbar.ejs') %>
+    
+    
+    <div class="container"> 
+     <hr>
+      <div class="card">
+        <div class="card-header">
+        <h2>Novo Artigo</h2>
+        </div>
+        <div class="card-body">
+        <form action="/cartegories/save" method="post">
+            <input type="text" placeholder="digite a nova cartegoria"  class="form-control" name="title">
+            <hr>
+            <textarea name="" id="art" class="form-control"></textarea>
+            <hr>
+            <button class="btn btn-success">Publicar</button>
+        </form>
+       </div>
+    </div>
+  </div>
+  <script src="/tinymce/js/tinymce/tinymce.min.js"></script>
+  <script>
+    tinymce.init({
+      selector: "#art",
+      Plugin:[
+        'advlist link media save preview autolink link wordcount preview table emoticons'
+      ]
+    })
+    
+   
+  </script>
+</body>
+
+<%- include('../../partials/footer.ejs') %>
