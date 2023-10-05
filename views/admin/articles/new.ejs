@@ -10,16 +10,16 @@
         <h2>Novo Artigo</h2>
         </div>
         <div class="card-body">
-        <form action="/cartegories/save" method="post">
-            <input type="text" placeholder="digite a nova cartegoria"  class="form-control" name="title">
+        <form action="/articles/save" method="post">
+            <input type="text" placeholder="Titulo"  class="form-control" name="title">
             <hr>
-            <textarea name="" id="art" class="form-control"></textarea>
+            <textarea name="body" id="art" class="form-control"></textarea>
             <hr>
-            <select name="" id="" class="form-control">
+            <select name="category" id="" class="form-control">
               <% category.forEach(category =>{ %>
                   <option value="<%=category.id%>"><%=category.title%></option>
              <% })%>
-              <option value="">php</option>
+             
             </select>
             <hr>
             <button class="btn btn-success">Publicar</button>
