@@ -15,7 +15,18 @@
             <hr>
             <textarea name="" id="art" class="form-control"></textarea>
             <hr>
+            <select name="" id="" class="form-control">
+              <% category.forEach(category =>{ %>
+                  <option value="<%=category.id%>"><%=category.title%></option>
+             <% })%>
+              <option value="">php</option>
+            </select>
+            <hr>
             <button class="btn btn-success">Publicar</button>
+           
+            <hr>
+
+           
         </form>
        </div>
     </div>
