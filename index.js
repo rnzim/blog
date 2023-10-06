@@ -43,64 +43,36 @@ app.get("/:slug",(req,res)=>{
     })
 })
 
+app.get('/page/:num',(req,res)=>{
+    var page = req.params.num
+    var offset = 0
+    if(isNaN(page) || page == 1){
+        offset = 0
+    }else{
+        offset = parseInt(page) * 3
+    }
+    Article.findAndCountAll({
+        limit:4,
+        offset:offset
+    }).then((article)=>{
+        var next = false;
 
-
-app.get('/category/:slug',(req,res)=>{
-    var slug = req.params.slug
-    Category.findOne({
-        where:{
-            slug:slug
-        },
-        include:[{model:Article}]
-        
-    }).then((category)=>{
-       Category.findAll().then((categories)=>{
-
-             
-             res.render('index.ejs',{articles:category.articles,categories:categories})
-         
-       })
-        
-
-        
-    }).catch(err =>{
-        res.redirect('/')
-    })
-})
-
-app.get('/article/edit/:id',(req,res)=>{
-    Category.findAll().then((category)=>{
-        var id = req.params.id
-        Article.findByPk(id).then((article)=>{
-            res.render('admin/articles/edit.ejs',{category:category,article:article})
-        })
-        
-    })
-       
-})
-
-
-app.post('/articles/edit/save',(req,res)=>{
-    var title = req.body.title
-    var body = req.body.body
-    var categoryId = req.body.category
-    console.log('\u001b[31m '+ categoryId)
-    var id = req.body.id
-    Article.update({ 
-        title:title,
-        body:body,
-        categoryId:categoryId},
-         { where:{
-           
-           id:id
-            
+        if(offset +4 >= article.count){
+                next = false
+        }else{
+            next = true
         }
-    }).then(()=>{
-        console.log('article update')
-        res.redirect('/articles')
+        var result={
+            article:article,
+            next:next
+        }
+        Category.findAll().then((category)=>{
+            res.render('admin/articles/page.ejs',{result:result,categories:category})
+        })
     })
-})
+    
 
+})
 
 connection.authenticate().then(()=>{
    console.log('\u001b[37mconnection with database \u001b[34msuccessful')

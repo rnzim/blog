@@ -50,4 +50,39 @@ router.post('/articles/delete',(req,res)=>{
      })
    }
 })
+
+router.get('/article/edit/:id',(req,res)=>{
+  Category.findAll().then((category)=>{
+      var id = req.params.id
+      Article.findByPk(id).then((article)=>{
+          res.render('admin/articles/edit.ejs',{category:category,article:article})
+      })
+      
+  })
+     
+})
+
+
+router.post('/articles/edit/save',(req,res)=>{
+  var title = req.body.title
+  var body = req.body.body
+  var categoryId = req.body.category
+  console.log('\u001b[31m '+ categoryId)
+  var id = req.body.id
+  Article.update({ 
+      title:title,
+      body:body,
+      categoryId:categoryId},
+       { where:{
+         
+         id:id
+          
+      }
+  }).then(()=>{
+      console.log('article update')
+      res.redirect('/articles')
+  })
+})
+
+
 module.exports = router

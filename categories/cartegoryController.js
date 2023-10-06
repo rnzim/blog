@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Category = require('./Category')
+const Article = require('../articles/Article')
 const slugify = require('slugify')
 
 router.get('/admin/categories/new',(req,res)=>{
@@ -86,4 +87,27 @@ router.post('/admin/categories/update/',(req,res)=>{
       res.redirect('/admin/categories')
     })
 })
+router.get('/category/:slug',(req,res)=>{
+    var slug = req.params.slug
+    Category.findOne({
+        where:{
+            slug:slug
+        },
+        include:[{model:Article}]
+        
+    }).then((category)=>{
+       Category.findAll().then((categories)=>{
+
+             
+             res.render('index.ejs',{articles:category.articles,categories:categories})
+         
+       })
+        
+
+        
+    }).catch(err =>{
+        res.redirect('/')
+    })
+})
+
 module.exports = router
