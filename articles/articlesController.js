@@ -4,19 +4,18 @@ const Category = require('../categories/Category')
 const Article = require('./Article')
 const slug = require('slugify')
 
-router.get("/article/read/:id",(req,res)=>{
-     id = req.params.id
-     res.send(id)
-})
 
 router.get('/articles',(req,res)=>{
-  Article.findAll().then((articles)=>{
+  Article.findAll({
+    include:[{model:Category}]
+   }).then((articles)=>{
+
     res.render('admin/articles/index.ejs',{article:articles})
   })
   
 })
 router.get('/articles/new',(req,res)=>{
-    Category.findAll({raw:true}).then((category)=>{
+    Category.findAll().then((category)=>{
         res.render('admin/articles/new.ejs',{category:category})
     })
    
@@ -30,11 +29,25 @@ router.post('/articles/save',(req,res)=>{
         title:title,
         slug:slug(title),
         body:body,
-        cartegoryId: category
+        categoryId: category
 
     }).then(()=>{
         res.redirect('/')
     })
    
+})
+router.post('/articles/delete',(req,res)=>{
+   var id = req.body.id
+   if(isNaN(id) || undefined){
+     res.redirect('/')
+   }else{
+     Article.destroy({
+        where:{
+            id:id
+        }
+     }).then(()=>{
+        res.redirect('/articles')
+     })
+   }
 })
 module.exports = router

@@ -1,0 +1,56 @@
+<%- include('../../partials/header.ejs') %>
+<body>
+    <%- include('../../partials/navbar.ejs') %>
+    
+    
+    <div class="container"> 
+     <hr>
+      <div class="card">
+        <div class="card-header">
+        <h2>Edição de Artigo</h2>
+        </div>
+        <div class="card-body">
+        <form action="/articles/edit/save" method="post">
+            <input value="<%=article.title%>"  type="text" placeholder="Titulo"  class="form-control" name="title">
+            <hr>
+            <input type="hidden" name="id" value="<%=article.id%>">
+            <textarea name="body" id="art" class="form-control" ><%=article.body%></textarea>
+            <hr>
+            <select name="category" id="" class="form-control">
+             
+              <% category.forEach(category =>{ %>
+                  <% if (category.id == article.categoryId) {%>
+                   
+                    <option value="<%=category.id%> " selected><%=category.title%></option>
+                  <%} else {%>
+                    <option  value="<%=category.id%> "><%=category.title%></option>
+                    <%}%>
+                 
+                 
+             <% })%>
+             
+            </select>
+          
+            <hr>
+            <button class="btn btn-success">Salvar Edição</button>
+           
+            <hr>
+            
+        </form>
+       </div>
+    </div>
+  </div>
+  <script src="/tinymce/js/tinymce/tinymce.min.js"></script>
+  <script>
+    tinymce.init({
+      selector: "#art",
+      Plugin:[
+        'advlist link media save preview autolink link wordcount preview table emoticons'
+      ]
+    })
+    
+   
+  </script>
+</body>
+
+<%- include('../../partials/footer.ejs') %>

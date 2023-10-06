@@ -15,8 +15,14 @@
             <% article.forEach(article =>{ %>
                 <tr>   <td><%=article.id %></td> <td><%=article.title %></td> <td><%=article.slug %></td>
                 <td>
-                    <%=article.categoryId %>
-                </td>  </tr>
+                    <%=article.category.title %>
+                </td> <td>
+                    <a class="btn btn-warning" href="/article/edit/<%= article.id %>" style="display: block; margin-bottom: 5px;">Editar</a>
+                    
+                    <form action="/articles/delete" method="post" id="form">
+                    <input type="hidden" name="id" value="<%= article.id %>" style="display: inline;">
+                    <button class="btn btn-danger">Deletar</button>
+                </form></td> </tr>
                 <%  })%>
           
             </tbody>
