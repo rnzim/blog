@@ -4,22 +4,25 @@ const bodyParser = require('body-parser')
 const connection = require('./database/database')
 const categoryController = require('./categories/cartegoryController')
 const articleController = require('./articles/articlesController')
-
+const userController = require('./user/UserController')
 const Category = require('./categories/Category')
 const Article = require('./articles/Article')
+
+const { INTEGER } = require('sequelize')
 
 app.set("view engine","ejs")
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended:false}))
 
 app.use('/',categoryController)
-
+app.use('/',userController)
 app.use('/',articleController)
 
 
 app.get("/",(req,res)=>{
     Article.findAll({
         raw:true,
+        limit:4,
         order:[['id','desc']]
     }).then((articles)=>{
         Category.findAll().then((category)=>{
@@ -44,32 +47,40 @@ app.get("/:slug",(req,res)=>{
 })
 
 app.get('/page/:num',(req,res)=>{
-    var page = req.params.num
+    var page = parseInt(req.params.num)
     var offset = 0
+    
     if(isNaN(page) || page == 1){
         offset = 0
     }else{
-        offset = parseInt(page) * 3
+        offset = (parseInt(page)-1) * 4
     }
-    Article.findAndCountAll({
-        limit:4,
-        offset:offset
-    }).then((article)=>{
-        var next = false;
+    if(!isNaN(page)){
+        Article.findAndCountAll({
+            limit:4,
+            offset:offset,
+            order:[['id','desc']]
+        }).then((article)=>{
+            var next = false;
 
-        if(offset +4 >= article.count){
-                next = false
-        }else{
-            next = true
-        }
-        var result={
-            article:article,
-            next:next
-        }
-        Category.findAll().then((category)=>{
-            res.render('admin/articles/page.ejs',{result:result,categories:category})
-        })
+            if(offset +4 >= article.count){
+                    next = false
+            }else{
+                next = true
+            }
+            var result={
+                article:article,
+                next:next,
+                page:page
+            }
+            Category.findAll().then((category)=>{
+                res.render('admin/articles/page.ejs',{result:result,categories:category})
+            })
+        
     })
+}else{
+    res.redirect('/page/1')
+}
     
 
 })

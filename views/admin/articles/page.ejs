@@ -27,7 +27,16 @@
                 <a class="btn btn-success" href="/<%= article.slug  %>">Ler</a>
             </div>
         </div>
+       
+       
         <% })  %>
+        <%if(result.next == true){%>
+          <a href="/page/<%= result.page+1%>" style="float: right;">Next</a>
+          <% } %>
+
+          <%if(result.page > 1){%>
+             <a href="/page/<%= result.page-1%>" style="float: left;">Prev</a>
+          <% } %>
      </div>
 </body>
 
