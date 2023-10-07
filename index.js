@@ -7,18 +7,29 @@ const articleController = require('./articles/articlesController')
 const userController = require('./user/UserController')
 const Category = require('./categories/Category')
 const Article = require('./articles/Article')
+const session = require('express-session')
 
-const { INTEGER } = require('sequelize')
-
+//view template engine
 app.set("view engine","ejs")
+//folder static
 app.use(express.static('public'))
+
+//enviar dados do formulario para o servidor
 app.use(bodyParser.urlencoded({extended:false}))
 
+app.use(session({
+    secret:'phpelento',
+    cookie: {maxAge: 60*60*1000},
+    resave: true,
+    saveUninitialized: true
+}))
+
+//controllers
 app.use('/',categoryController)
 app.use('/',userController)
 app.use('/',articleController)
 
-
+//rotas
 app.get("/",(req,res)=>{
     Article.findAll({
         raw:true,
