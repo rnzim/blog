@@ -6,6 +6,7 @@ function adminUser(req,res,next){
     }else{
         res.redirect('/login')
     }
+    */
 }
-*/
+
 module.exports = adminUser
