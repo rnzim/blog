@@ -96,7 +96,7 @@ router.post('/admin/categories/update/',adminUser,(req,res)=>{
       res.redirect('/admin/categories')
     })
 })
-router.get('/category/:slug',adminUser,(req,res)=>{
+router.get('/category/:slug',(req,res)=>{
     var slug = req.params.slug
     Category.findOne({
         where:{
