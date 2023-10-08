@@ -3,12 +3,13 @@ const router = express.Router()
 const Category = require('./Category')
 const Article = require('../articles/Article')
 const slugify = require('slugify')
+const adminUser = require('../middleware/authUse')
 
-router.get('/admin/categories/new',(req,res)=>{
+router.get('/admin/categories/new',adminUser,(req,res)=>{
     res.render('admin/categories/new.ejs')
 })
 
-router.post('/cartegories/save',(req,res) =>{
+router.post('/cartegories/save',adminUser,(req,res) =>{
      var title = req.body.title
      if(title != undefined){
         Category.create({
@@ -21,21 +22,29 @@ router.post('/cartegories/save',(req,res) =>{
         res.redirect('/admin/categories/new')
      }
 })
-router.get('/admin/categories/',(req,res)=>{
-    Category.findAll({
-       raw:true, order:[['id','desc']]
-    }).then((categories)=>{
-        res.render('admin/categories/index.ejs',{categories:categories})
-
-        //degug
-        categories.forEach(categories => {
-            console.log('\n\u001b[32m Cartegorias: \n')
-            console.log('\u001b[37m Categoria: '+categories.id+ '\u001b[33m  Nome: '+categories.title)
-        })
-    })
-   
-})
-router.post('/categories/delete',(req,res)=>{
+router.get('/admin/categories/', adminUser, async (req, res) => {
+    try {
+      const categories = await Category.findAll({
+        order: [['id', 'desc']]
+      });
+  
+      const countPromises = categories.map(async (category) => {
+        const articleCountCat = await Article.count({
+          where: { categoryId: category.id }
+        });
+        return articleCountCat;
+      });
+  
+      const count = await Promise.all(countPromises);
+  
+      res.render('admin/categories/index.ejs',{categories:categories,count:count})
+    } catch (error) {
+      console.error('Erro:', error);
+      res.status(500).json({ error: 'Ocorreu um erro ao buscar a contagem.' });
+    }
+  });
+  
+router.post('/categories/delete',adminUser,(req,res)=>{
     var id = req.body.id
     if(id == undefined){
         res.redirect('/admin/categories/ban')
@@ -58,11 +67,11 @@ router.post('/categories/delete',(req,res)=>{
     
    
 })
-router.get('/admin/categories/ban',(req,res)=>{
+router.get('/admin/categories/ban',adminUser,(req,res)=>{
     res.render('admin/categories/ban')
 })
 
-router.get('/admin/categories/edit/:id',(req,res)=>{
+router.get('/admin/categories/edit/:id',adminUser,(req,res)=>{
     var id = req.params.id
     if(isNaN(id)){
         res.redirect('admin/categories/')
@@ -74,7 +83,7 @@ router.get('/admin/categories/edit/:id',(req,res)=>{
     })
 })
 
-router.post('/admin/categories/update/',(req,res)=>{
+router.post('/admin/categories/update/',adminUser,(req,res)=>{
     var id = req.body.id
     var title = req.body.title
     Category.update({title:title,slug:slugify(title)},
@@ -87,7 +96,7 @@ router.post('/admin/categories/update/',(req,res)=>{
       res.redirect('/admin/categories')
     })
 })
-router.get('/category/:slug',(req,res)=>{
+router.get('/category/:slug',adminUser,(req,res)=>{
     var slug = req.params.slug
     Category.findOne({
         where:{

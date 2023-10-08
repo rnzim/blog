@@ -9,19 +9,30 @@
         <a href="/admin/categories/new" class="btn btn-success">Nova Cartegoria</a>
         <hr>
         <table class="table table-bordered">
-            <thead><th>ID</th><th>Titulo</th> <th>Slug</th><th>Ações</th></thead>
+            <thead><th>ID</th><th>Titulo</th> <th>Slug</th><th>Ações</th><th>Artigos</th></thead>
            
             <tbody>
+            <% let c = 0 %>
             <% categories.forEach(categories =>{ %> 
-             <tr> <td><%= categories.id %></td> <td><%= categories.title %></td> <td><%= categories.slug %><td>
+             <tr> <td><%= categories.id %></td> 
+             <td><%= categories.title %></td> 
+             <td><%= categories.slug %></td> 
+             <td>
+               
                 <a class="btn btn-warning" href="/admin/categories/edit/<%= categories.id %>">Editar</a>
                 <form action="/categories/delete" method="post" id="form">
                     <input type="hidden" name="id" value="<%= categories.id %>" style="display: inline;">
                     <button class="btn btn-danger">Deletar</button>
                 </form>
+            </td> 
+        <td><%= count[c] %> Artigos</td>
+              <%c++%>
+              
+                
+            
                
-               
-            <%})%>   
+            <%})%> 
+           
             </tbody>
            
         </table>

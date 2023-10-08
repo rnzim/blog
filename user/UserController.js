@@ -54,7 +54,7 @@ router.post('/authenticate',(req,res)=>{
             req.session.user= {email: user.name,id:user.id}
             console.log(req.session.user)
             //res.redirect('/articles')
-            res.json(req.session.user)
+            res.redirect('/articles')
          }
          
         else{
